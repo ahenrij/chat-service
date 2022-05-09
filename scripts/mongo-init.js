@@ -1,10 +1,10 @@
 db.createUser({
   user: "root",
-  pwd: "h3W+ee3p+st2VJlnRiIMTw==",
+  pwd: "n1FCIaA+5G+i5MKLcgg49w==",
   roles: [
     {
-      role: 'dbOwner',
-      db: "sailsmongodb",
+      role: "dbOwner",
+      db: "chatservice",
     },
   ],
 });

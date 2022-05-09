@@ -1,5 +1,5 @@
 /**
- * User.js
+ * Room.js
  *
  * @description :: A model definition represents a database table/collection.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
@@ -13,9 +13,12 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
     name: { type: 'string', required: true },
+    description: { type: 'string' },
+    tags: { type: 'json' },
     refId: { type: 'string' },
-    pseudo: { type: 'string' },
-    
+    client: { type: 'string' },
+    private: { type: 'boolean', defaultsTo: false }
+
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝

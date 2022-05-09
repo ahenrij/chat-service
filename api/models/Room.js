@@ -17,7 +17,7 @@ module.exports = {
     tags: { type: 'json' },
     refId: { type: 'string' },
     client: { type: 'string' },
-    private: { type: 'boolean', defaultsTo: false }
+    isPrivate: { type: 'boolean', defaultsTo: false }
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

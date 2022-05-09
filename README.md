@@ -5,6 +5,8 @@ A microservice for chat messaging.
 ## Resources
 * [Diagram Class](https://drive.google.com/file/d/1x2E08UuK3i-zrPaa0mz-p8hxthyV-HCZ/view?usp=sharing)
 
+* Inspired by [m3o chat api](https://m3o.com/chat/api)
+
 ## Get started
 
 Install dependencies

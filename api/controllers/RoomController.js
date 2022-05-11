@@ -5,6 +5,8 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
+const sailsHookAutoreload = require("sails-hook-autoreload");
+
 module.exports = {
   
     find: function(req, res) {
@@ -17,10 +19,11 @@ module.exports = {
 
     history: function(req, res) {
         let id = req.param('id');
-        if (!id) {
+        if (id.trim() == '') {
             res.badRequest({ message: 'Please make sure request parameters are correct.' })
+            return;
         }
-        Room.find({ id }).populate('messages').exec((error, data) => {
+        Room.findOne({ or: [{ id: id }, {refId: id}] }).populate('messages').exec((error, data) => {
             if (error) { return res.serverError(error); }
             if (!data) { return res.serverError({ message: 'Aucune donnée correspondante' }); }
             res.ok({ data: data.messages });

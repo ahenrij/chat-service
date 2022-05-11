@@ -17,7 +17,7 @@ module.exports = {
     tags: { type: 'json' },
     refId: { type: 'string' },
     client: { type: 'string' },
-    isPrivate: { type: 'boolean', defaultsTo: false }
+    isPrivate: { type: 'boolean', defaultsTo: false },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
@@ -27,7 +27,8 @@ module.exports = {
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
-
+    messages: { collection: 'message', via: 'room' },
+    members: { collection: 'user', via: 'rooms' },
   },
 
 };

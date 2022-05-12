@@ -5,6 +5,9 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
+const TYPING_EVENT = 'typing'
+const STOPPED_TYPING_EVENT = 'stoppedTyping'
+
 
 module.exports = {
   
@@ -74,6 +77,9 @@ module.exports = {
     },
 
     leave: async function (req, res) {
+        if (!req.isSocket) {
+            return res.badRequest({ message: 'This must be a socket request.' })
+        }
         let roomId = req.body.roomId
         let userId = req.body.userId
         if (!roomId || !userId) {
@@ -82,7 +88,38 @@ module.exports = {
         Room.removeFromCollection(roomId, 'members', userId).exec(async (error, _data) => {
             if (error) { return res.serverError(error) }
             let data = await Room.findOne({ id: roomId }).populate('members')
+            sails.sockets.leave(req, 'room_' + roomId)
             res.ok({ data })
         })
+    },
+
+    typing: function (req, res) {
+        if (!req.isSocket) {
+            return res.badRequest({ message: 'This must be a socket request.' })
+        }
+        let userId = req.body.userId // user that is typing's id
+        let roomId = req.body.roomId
+        if (!roomId || !userId) {
+            res.badRequest({ message: 'Please make sure request parameters are correct.' })
+        }
+        User.findOne({or: [ {id: userId }, { refId: userId } ]}).exec((error, foundUser) => {
+            if (error) { return res.negotiate(error) }
+            if (!foundUser) { return res.notFound('No user found') }
+            // send typing event except user itself.
+            sails.broadcast('room_' + roomId, TYPING_EVENT, foundUser, (req.isSocket ? req : undefined))
+            return res.ok()
+        })
+    },
+
+    stoppedTyping: function (req, res) {
+        if (!req.isSocket) {
+            return res.badRequest({ message: 'This must be a socket request.' })
+        }
+        let roomId = req.body.roomId
+        if (!roomId) {
+            res.badRequest({ message: 'Please make sure request parameters are correct.' })
+        }
+        sails.broadcast('room_' + roomId, STOPPED_TYPING_EVENT, (req.isSocket ? req : undefined))
+        return res.ok()
     }
 }

@@ -54,6 +54,9 @@ module.exports = {
      * @param {*} res 
      */
     join: async function (req, res) {
+        if (!req.isSocket) {
+            return res.badRequest({ message: 'This must be a socket request.' })
+        }
         let roomId = req.body.roomId
         let userId = req.body.userId
         if (!roomId || !userId) {
@@ -64,6 +67,8 @@ module.exports = {
         Room.addToCollection(roomId, 'members', userId).exec(async (error, _data) => {
             if (error) { return res.serverError(error) }
             let data = await Room.findOne({ id: roomId }).populate('members')
+            //join the current socket to the room
+            sails.sockets.join(req, 'room_' + roomId)
             res.ok({ data })
         })
     },
@@ -79,9 +84,5 @@ module.exports = {
             let data = await Room.findOne({ id: roomId }).populate('members')
             res.ok({ data })
         })
-    },
-
-    send: async function (req, res) {
-        
     }
 }

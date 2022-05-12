@@ -14,7 +14,8 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
     message: { type: 'string' },
     attachment: { type: 'string' },
-    client: { type: 'string' },
+    client: { type: 'string' }, // the application used to send the message. e.g.: web, android, etc.
+    sender: { type: 'string' },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
@@ -25,7 +26,6 @@ module.exports = {
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
     room: { model: 'room' },
-    sender: { model: 'user' },
   },
 
 };

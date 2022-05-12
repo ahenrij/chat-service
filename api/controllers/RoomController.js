@@ -13,7 +13,7 @@ module.exports = {
      * @param {*} _ request obj.
      * @param {*} res response obj.
      */
-    find: function(_req, res) {
+    find: function (_req, res) {
         Room.find().populate('members').exec((error, data) => {
             if (error) { return res.serverError(error) }
             if (!data) { return res.notFound({ message: 'Aucune donnée correspondante' }) }
@@ -21,7 +21,7 @@ module.exports = {
         })
     },
 
-    findOne: function(req, res) {
+    findOne: function (req, res) {
         let id = req.param('id')
         Room.findOne({ id }).populate('members').exec((error, data) => {
             if (error) { return res.serverError(error) }
@@ -79,5 +79,9 @@ module.exports = {
             let data = await Room.findOne({ id: roomId }).populate('members')
             res.ok({ data })
         })
+    },
+
+    send: async function (req, res) {
+        
     }
 }

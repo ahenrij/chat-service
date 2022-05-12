@@ -16,7 +16,7 @@ module.exports = {
     description: { type: 'string' },
     tags: { type: 'json' },
     refId: { type: 'string' },
-    client: { type: 'string' },
+    context: { type: 'string' },
     isPrivate: { type: 'boolean', defaultsTo: false },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗

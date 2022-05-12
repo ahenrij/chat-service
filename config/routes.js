@@ -33,6 +33,7 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
   'GET /room/:id/history': { controller: 'RoomController', action: 'history' },
+  'POST /room/send': { controller: 'MessageController', action: 'create' },
   'POST /room/join': { controller: 'RoomController', action: 'join' },
   'POST /room/leave': { controller: 'RoomController', action: 'leave' },
 };

@@ -5,29 +5,56 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
-const sailsHookAutoreload = require("sails-hook-autoreload");
 
 module.exports = {
   
-    find: function(req, res) {
+    /**
+     * List all rooms with their members.
+     * @param {*} _ request obj.
+     * @param {*} res response obj.
+     */
+    find: function(_req, res) {
         Room.find().populate('members').exec((error, data) => {
-            if (error) { return res.serverError(error); }
-            if (!data) { return res.notFound({ message: 'Aucune donnée correspondante' }); }
-            res.ok({ data: data });
-        });
+            if (error) { return res.serverError(error) }
+            if (!data) { return res.notFound({ message: 'Aucune donnée correspondante' }) }
+            res.ok({ data })
+        })
     },
 
-    history: function(req, res) {
-        let id = req.param('id');
+    /**
+     * Get messages history in a given room
+     * @param {*} req 
+     * @param {*} res 
+     */
+    history: function (req, res) {
+        let id = req.param('id')
         if (id.trim() == '') {
             res.badRequest({ message: 'Please make sure request parameters are correct.' })
-            return;
+            return
         }
         Room.findOne({ or: [{ id: id }, {refId: id}] }).populate('messages').exec((error, data) => {
-            if (error) { return res.serverError(error); }
-            if (!data) { return res.serverError({ message: 'Aucune donnée correspondante' }); }
-            res.ok({ data: data.messages });
-        });
-    }
-};
+            if (error) { return res.serverError(error) }
+            if (!data) { return res.serverError({ message: 'Aucune donnée correspondante' }) }
+            res.ok({ data: data.messages })
+        })
+    },
 
+    /**
+     * Join a given room
+     * @param {*} req 
+     * @param {*} res 
+     */
+    join: async function (req, res) {
+        let roomId = req.body.roomId
+        let userId = req.body.userId
+        if (!roomId || !userId) {
+            res.badRequest({ message: 'Please make sure request parameters are correct.' })
+        }
+        // Ensure there is no duplicated data.
+        await Room.removeFromCollection(roomId, 'members', userId)
+        Room.addToCollection(roomId, 'members', userId).exec((error, _data) => {
+            if (error) { return res.serverError(error) }
+            res.ok()
+        })
+    }
+}

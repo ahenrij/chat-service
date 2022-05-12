@@ -7,6 +7,12 @@
 
 module.exports = {
   
-
+    find: function(req, res) {
+        User.find().exec((error, data) => {
+            if (error) { return res.serverError(error) }
+            if (!data) { return res.notFound({ message: 'Aucune donnée correspondante' }) }
+            res.ok({ data })
+        })
+    }
 };
 

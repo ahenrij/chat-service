@@ -33,5 +33,5 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
   'GET /room/:id/history': { controller: 'RoomController', action: 'history' },
-
+  'POST /room/join': { controller: 'RoomController', action: 'join' },
 };

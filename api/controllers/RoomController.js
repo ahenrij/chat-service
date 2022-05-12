@@ -56,5 +56,17 @@ module.exports = {
             if (error) { return res.serverError(error) }
             res.ok()
         })
+    },
+
+    kick: async function (req, res) {
+        let roomId = req.body.roomId
+        let userId = req.body.userId
+        if (!roomId || !userId) {
+            res.badRequest({ message: 'Please make sure request parameters are correct.' })
+        }
+        Room.removeFromCollection(roomId, 'members', userId).exec((error, _data) => {
+            if (error) { return res.serverError(error) }
+            res.ok()
+        })
     }
 }

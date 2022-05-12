@@ -21,6 +21,15 @@ module.exports = {
         })
     },
 
+    findOne: function(req, res) {
+        let id = req.param('id')
+        Room.findOne({ id }).populate('members').exec((error, data) => {
+            if (error) { return res.serverError(error) }
+            if (!data) { return res.notFound({ message: 'Aucune donnée correspondante' }) }
+            res.ok({ data })
+        })
+    },
+
     /**
      * Get messages history in a given room
      * @param {*} req 

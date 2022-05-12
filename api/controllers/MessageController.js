@@ -5,7 +5,7 @@
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
 
-const NEW_MESSAGE_EVENT = 'newMessage'
+const NEW_MESSAGE_EVENT = 'message'
 
 module.exports = {
   

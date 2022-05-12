@@ -4,10 +4,11 @@
  * @description :: Server-side actions for handling incoming requests.
  * @help        :: See https://sailsjs.com/docs/concepts/actions
  */
+ require('dotenv').config()
 
 const TYPING_EVENT = 'typing'
 const STOPPED_TYPING_EVENT = 'stoppedTyping'
-
+const checkSocket = (process.env.STRICTLY_CHECK_SOCKET === 'true')
 
 module.exports = {
   
@@ -17,18 +18,18 @@ module.exports = {
      * @param {*} res response obj.
      */
     find: function (_req, res) {
-        Room.find().populate('members').exec((error, data) => {
+        Room.find().exec((error, data) => {
             if (error) { return res.serverError(error) }
-            if (!data) { return res.notFound({ message: 'Aucune donnée correspondante' }) }
+            if (!data) { return res.notFound({ message: 'Aucune donnée correspondante.' }) }
             res.ok({ data })
         })
     },
 
     findOne: function (req, res) {
         let id = req.param('id')
-        Room.findOne({ id }).populate('members').exec((error, data) => {
+        Room.findOne({ or: [{ id }, { refId: id }] }).exec((error, data) => {
             if (error) { return res.serverError(error) }
-            if (!data) { return res.notFound({ message: 'Aucune donnée correspondante' }) }
+            if (!data) { return res.notFound({ message: 'Aucune donnée correspondante.' }) }
             res.ok({ data })
         })
     },
@@ -45,8 +46,8 @@ module.exports = {
             return
         }
         Room.findOne({ or: [{ id: id }, {refId: id}] }).populate('messages').exec((error, data) => {
-            if (error) { return res.serverError(error) }
-            if (!data) { return res.serverError({ message: 'Aucune donnée correspondante' }) }
+            if (error) { return res.negotiate(error) }
+            if (!data) { return res.notFound({ message: 'Aucune donnée correspondante.' }) }
             res.ok({ data: data.messages })
         })
     },
@@ -56,8 +57,8 @@ module.exports = {
      * @param {*} req 
      * @param {*} res 
      */
-    join: async function (req, res) {
-        if (!req.isSocket) {
+    join: function (req, res) {
+        if (checkSocket && !req.isSocket) {
             return res.badRequest({ message: 'This must be a socket request.' })
         }
         let roomId = req.body.roomId
@@ -65,19 +66,25 @@ module.exports = {
         if (!roomId || !userId) {
             res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
-        // Ensure there is no duplicated data.
-        await Room.removeFromCollection(roomId, 'members', userId)
-        Room.addToCollection(roomId, 'members', userId).exec(async (error, _data) => {
+        Room.findOne({ or: [{id: roomId}, {refId: roomId}] }).exec(async (error, foundRoom) => {
             if (error) { return res.serverError(error) }
-            let data = await Room.findOne({ id: roomId }).populate('members')
-            //join the current socket to the room
+            if (!foundRoom) { return res.notFound({ message: 'Aucune donnée correspondante.' }) }
+            // Add user(s) to members
+            if (Array.isArray(userId)) {
+                foundRoom.members.push.apply(foundRoom.members, userId)
+            } else {
+                foundRoom.members.push(userId)
+            }
+            let members = _.uniq(foundRoom.members)
+            // save update
+            let updatedRoom = await Room.update({ id: foundRoom.id }).set( { members } ).fetch()
             sails.sockets.join(req, 'room_' + roomId)
-            res.ok({ data })
+            res.ok({ data: updatedRoom })
         })
     },
 
     leave: async function (req, res) {
-        if (!req.isSocket) {
+        if (checkSocket && !req.isSocket) {
             return res.badRequest({ message: 'This must be a socket request.' })
         }
         let roomId = req.body.roomId
@@ -85,16 +92,20 @@ module.exports = {
         if (!roomId || !userId) {
             res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
-        Room.removeFromCollection(roomId, 'members', userId).exec(async (error, _data) => {
-            if (error) { return res.serverError(error) }
-            let data = await Room.findOne({ id: roomId }).populate('members')
+        Room.findOne({ or: [{id: roomId}, {refId: roomId}] }).exec(async (error, foundRoom) => {
+            if (error) { return res.negotiate(error) }
+            if (!foundRoom) { return res.notFound({ message: 'Aucune donnée correspondante.' }) }
+            _.remove(foundRoom.members, m => m == userId)
+            let members = foundRoom.members
+            // save update
+            let updatedRoom = await Room.update({ id: foundRoom.id }).set( { members } ).fetch()
             sails.sockets.leave(req, 'room_' + roomId)
-            res.ok({ data })
+            res.ok({ data: updatedRoom })
         })
     },
 
     typing: function (req, res) {
-        if (!req.isSocket) {
+        if (checkSocket && !req.isSocket) {
             return res.badRequest({ message: 'This must be a socket request.' })
         }
         let userId = req.body.userId // user that is typing's id

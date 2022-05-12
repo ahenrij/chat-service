@@ -14,7 +14,6 @@ module.exports = {
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
     name: { type: 'string', required: true },
     description: { type: 'string' },
-    tags: { type: 'json' },
     refId: { type: 'string' },
     context: { type: 'string' },
     isPrivate: { type: 'boolean', defaultsTo: false },
@@ -22,7 +21,8 @@ module.exports = {
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
-    members: { type: 'json' },
+    tags: { type: 'json', defaultsTo: [] },
+    members: { type: 'json', defaultsTo: [] },
 
 
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗

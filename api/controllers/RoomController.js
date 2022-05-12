@@ -61,9 +61,10 @@ module.exports = {
         }
         // Ensure there is no duplicated data.
         await Room.removeFromCollection(roomId, 'members', userId)
-        Room.addToCollection(roomId, 'members', userId).exec((error, _data) => {
+        Room.addToCollection(roomId, 'members', userId).exec(async (error, _data) => {
             if (error) { return res.serverError(error) }
-            res.ok()
+            let data = await Room.findOne({ id: roomId }).populate('members')
+            res.ok({ data })
         })
     },
 
@@ -73,9 +74,10 @@ module.exports = {
         if (!roomId || !userId) {
             res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
-        Room.removeFromCollection(roomId, 'members', userId).exec((error, _data) => {
+        Room.removeFromCollection(roomId, 'members', userId).exec(async (error, _data) => {
             if (error) { return res.serverError(error) }
-            res.ok()
+            let data = await Room.findOne({ id: roomId }).populate('members')
+            res.ok({ data })
         })
     }
 }

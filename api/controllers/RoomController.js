@@ -98,7 +98,7 @@ module.exports = {
             _.remove(foundRoom.members, m => m == userId)
             let members = foundRoom.members
             // save update
-            let updatedRoom = await Room.update({ id: foundRoom.id }).set( { members } ).fetch()
+            let updatedRoom = await Room.update({ id: foundRoom.id }).set({ members }).fetch()
             sails.sockets.leave(req, 'room_' + roomId)
             res.ok({ data: updatedRoom })
         })
@@ -108,18 +108,15 @@ module.exports = {
         if (checkSocket && !req.isSocket) {
             return res.badRequest({ message: 'This must be a socket request.' })
         }
-        let userId = req.body.userId // user that is typing's id
+        let user = req.body.user // user that is typing's id and name
         let roomId = req.body.roomId
-        if (!roomId || !userId) {
+        if (!roomId || !user.id || !user.name) {
             res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
-        User.findOne({or: [ {id: userId }, { refId: userId } ]}).exec((error, foundUser) => {
-            if (error) { return res.negotiate(error) }
-            if (!foundUser) { return res.notFound('No user found') }
-            // send typing event except user itself.
-            sails.broadcast('room_' + roomId, TYPING_EVENT, foundUser, (req.isSocket ? req : undefined))
-            return res.ok()
-        })
+        // TODO: Check if room exists
+        // send typing event except user itself.
+        sails.broadcast('room_' + roomId, TYPING_EVENT, user, (req.isSocket ? req : undefined))
+        return res.ok()
     },
 
     stoppedTyping: function (req, res) {
@@ -130,6 +127,7 @@ module.exports = {
         if (!roomId) {
             res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
+        // TODO: Check if room exists
         sails.broadcast('room_' + roomId, STOPPED_TYPING_EVENT, (req.isSocket ? req : undefined))
         return res.ok()
     }

@@ -58,7 +58,7 @@ module.exports = {
         })
     },
 
-    kick: async function (req, res) {
+    leave: async function (req, res) {
         let roomId = req.body.roomId
         let userId = req.body.userId
         if (!roomId || !userId) {

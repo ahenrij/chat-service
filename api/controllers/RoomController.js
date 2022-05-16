@@ -62,19 +62,15 @@ module.exports = {
             return res.badRequest({ message: 'This must be a socket request.' })
         }
         let roomId = req.body.roomId
-        let userId = req.body.userId
-        if (!roomId || !userId) {
+        let user = req.body.user // user's json representation with mandatory id field
+        if (!roomId || !user || !user.id) {
             res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
         Room.findOne({ or: [{id: roomId}, {refId: roomId}] }).exec(async (error, foundRoom) => {
             if (error) { return res.serverError(error) }
             if (!foundRoom) { return res.notFound({ message: 'Aucune donnée correspondante.' }) }
-            // Add user(s) to members
-            if (Array.isArray(userId)) {
-                foundRoom.members.push.apply(foundRoom.members, userId)
-            } else {
-                foundRoom.members.push(userId)
-            }
+            // Add user to members
+            foundRoom.members.push(user)
             let members = _.uniq(foundRoom.members)
             // save update
             let updatedRoom = await Room.update({ id: foundRoom.id }).set( { members } ).fetch()
@@ -88,14 +84,14 @@ module.exports = {
             return res.badRequest({ message: 'This must be a socket request.' })
         }
         let roomId = req.body.roomId
-        let userId = req.body.userId
-        if (!roomId || !userId) {
+        let user = req.body.user // user's json representation with mandatory id field
+        if (!roomId || !user || !user.id) {
             res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
         Room.findOne({ or: [{id: roomId}, {refId: roomId}] }).exec(async (error, foundRoom) => {
             if (error) { return res.negotiate(error) }
             if (!foundRoom) { return res.notFound({ message: 'Aucune donnée correspondante.' }) }
-            _.remove(foundRoom.members, m => m == userId)
+            _.remove(foundRoom.members, m => m.id == user.id)
             let members = foundRoom.members
             // save update
             let updatedRoom = await Room.update({ id: foundRoom.id }).set({ members }).fetch()
@@ -110,7 +106,7 @@ module.exports = {
         }
         let user = req.body.user // user that is typing's id and name
         let roomId = req.body.roomId
-        if (!roomId || !user.id || !user.name) {
+        if (!roomId || !user || !user.id || !user.name) {
             res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
         // TODO: Check if room exists

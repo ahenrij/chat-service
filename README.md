@@ -30,3 +30,21 @@ Properly stop development mode after a Ctrl + C
 ```
 
 API will be running at [http://localhost:1337](http://localhost:1337)
+
+
+## Env. variables
+
+- *DATABASE_URL* : Database connection string. More information [here](https://sailsjs.com/documentation/reference/configuration/sails-config-datastores#the-connection-url)
+- *DATABASE_TYPE* : disk, mysql, postgres, mongo (default to disk)
+
+
+## Production
+
+### Run docker image
+
+```shell
+docker run -it -p 80:1337 -e "DATABASE_TYPE=mongo" -e "DATABASE_URL=mongodb://localhost:27017/chat_service_db" --name chat-service darkpearl/chat-service
+```
+
+### Run using docker compose
+See backend usage example in [docker-compose.test.yml](./docker-compose.test.yml) file.

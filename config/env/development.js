@@ -3,12 +3,8 @@ require('dotenv').config()
 module.exports = {
     datastores: {
         default: {
-            adapter: 'sails-mongo',
-            url: "mongodb://" + 
-            process.env.MONGO_INITDB_ROOT_USERNAME + ":" + 
-            process.env.MONGO_INITDB_ROOT_PASSWORD + "@" + 
-            process.env.MONGO_SERVER_LOCAL +":27017/" + 
-            process.env.MONGO_INITDB_DATABASE,
+            adapter: process.env.DATABASE_TYPE ? `sails-${process.env.DATABASE_TYPE}` : 'sails-disk',
+            url: process.env.DATABASE_URL
         }
     },
     security: {

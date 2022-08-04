@@ -31,19 +31,20 @@ Install dependencies
 npm install
 ```
 
-Define environment variables
+Define environment variables in `.env` file
 ```shell
 cp .env.example .env
 ```
 
-Run in development mode
+Start in development mode
 ```shell
 ./scripts/start-dev.sh
 ```
 
-Properly stop development mode after a Ctrl + C
+API will be running at [http://localhost:1337](http://localhost:1337)
+
+Properly stop development mode after shutting down Sails with `<Ctrl> + C`
 ```shell
 ./scripts/stop-dev.sh
 ```
 
-API will be running at [http://localhost:1337](http://localhost:1337)

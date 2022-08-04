@@ -1,10 +1,12 @@
-db.createUser({
-  user: "root",
-  pwd: "n1FCIaA+5G+i5MKLcgg49w==",
-  roles: [
+db.createUser(
     {
-      role: "dbOwner",
-      db: "chatservice",
-    },
-  ],
-});
+        user: _getEnv("MONGO_INITDB_ROOT_USERNAME"),
+        pwd: _getEnv("MONGO_INITDB_ROOT_PASSWORD"),
+        roles: [
+            {
+                role: "dbOwner",
+                db: _getEnv("MONGO_INITDB_DATABASE"),
+            },
+        ],
+    }
+);

@@ -5,7 +5,10 @@ A microservice for chat messaging.
 ## Resources
 * [Diagram Class](https://drive.google.com/file/d/1x2E08UuK3i-zrPaa0mz-p8hxthyV-HCZ/view?usp=sharing)
 
+* [API Documentation](https://documenter.getpostman.com/view/4479808/VUjLK6eb)
+
 * Inspired by [m3o chat api](https://m3o.com/chat/api)
+
 
 ## Env. variables
 

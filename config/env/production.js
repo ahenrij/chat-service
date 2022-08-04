@@ -70,6 +70,9 @@ module.exports = {
       * https://sailsjs.com/config/datastores                                     *
       *                                                                           *
       ****************************************************************************/
+      
+      adapter: process.env.DATABASE_TYPE ? `sails-${process.env.DATABASE_TYPE}` : 'sails-disk',
+      url: process.env.DATABASE_URL
       // ssl: true,
 
     },

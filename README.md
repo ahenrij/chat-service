@@ -29,7 +29,7 @@ See backend usage example in [docker-compose.test.yml](./docker-compose.test.yml
 
 <br>
 
-## Get started
+## Get started for development
 
 Install dependencies
 ```shell

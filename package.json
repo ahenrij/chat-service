@@ -28,7 +28,7 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/henri/chat-service.git"
+    "url": "git://github.com/ahenrij/chat-service.git"
   },
   "author": "ahenrij",
   "license": "",

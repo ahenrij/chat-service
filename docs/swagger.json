@@ -1,0 +1,2293 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Swagger Json",
+    "description": "This is a generated swagger json for your sails project",
+    "termsOfService": "http://example.com/terms",
+    "contact": {
+      "name": "Theophilus Omoregbee",
+      "url": "http://github.com/theo4u",
+      "email": "theo4u@ymail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:1337/"
+    }
+  ],
+  "externalDocs": {
+    "url": "https://theoomoregbee.github.io/"
+  },
+  "tags": [
+    {
+      "name": "Message",
+      "description": "Sails blueprint actions for the **Message** model"
+    },
+    {
+      "name": "Room",
+      "description": "Sails blueprint actions for the **Room** model"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "message": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/message-without-required-constraint"
+          }
+        ]
+      },
+      "message-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **Message**",
+        "properties": {
+          "createdAt": {
+            "type": "number",
+            "format": "double"
+          },
+          "updatedAt": {
+            "type": "number",
+            "format": "double"
+          },
+          "id": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "message": {
+            "type": "string"
+          },
+          "attachment": {
+            "type": "string"
+          },
+          "client": {
+            "type": "string"
+          },
+          "sender": {},
+          "room": {
+            "description": "JSON dictionary representing the **room** instance or FK when creating / updating / not populated",
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/room"
+              }
+            ]
+          }
+        }
+      },
+      "room": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/room-without-required-constraint"
+          },
+          {
+            "required": [
+              "name"
+            ]
+          }
+        ]
+      },
+      "room-without-required-constraint": {
+        "type": "object",
+        "description": "Sails ORM Model **Room**",
+        "properties": {
+          "createdAt": {
+            "type": "number",
+            "format": "double"
+          },
+          "updatedAt": {
+            "type": "number",
+            "format": "double"
+          },
+          "id": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "refId": {
+            "type": "string"
+          },
+          "context": {
+            "type": "string"
+          },
+          "isPrivate": {
+            "type": "boolean",
+            "default": false
+          },
+          "tags": {
+            "type": "array",
+            "items": {},
+            "default": [],
+            "example": []
+          },
+          "members": {
+            "type": "array",
+            "items": {},
+            "default": [],
+            "example": []
+          },
+          "messages": {
+            "description": "Array of **message**'s or array of FK's when creating / updating / not populated",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/message"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "ModelPKParam-message": {
+        "in": "path",
+        "name": "_id",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "description": "The desired **Message** record's primary key value"
+      },
+      "ModelPKParam-room": {
+        "in": "path",
+        "name": "_id",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "uniqueItems": true
+        },
+        "description": "The desired **Room** record's primary key value"
+      },
+      "AttributeFilterParam": {
+        "in": "query",
+        "name": "_*_",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "To filter results based on a particular attribute, specify a query parameter with the same name as the attribute defined on your model. For instance, if our `Purchase` model has an `amount` attribute, we could send `GET /purchase?amount=99.99` to return a list of $99.99 purchases."
+      },
+      "WhereQueryParam": {
+        "in": "query",
+        "name": "where",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "Instead of filtering based on a specific attribute, you may instead choose to provide a `where` parameter with the WHERE piece of a [Waterline criteria](https://sailsjs.com/documentation/concepts/models-and-orm/query-language), _encoded as a JSON string_. This allows you to take advantage of `contains`, `startsWith`, and other sub-attribute criteria modifiers for more powerful `find()` queries.\n\ne.g. `?where={\"name\":{\"contains\":\"theodore\"}}`"
+      },
+      "LimitQueryParam": {
+        "in": "query",
+        "name": "limit",
+        "required": false,
+        "schema": {
+          "type": "integer"
+        },
+        "description": "The maximum number of records to send back (useful for pagination). Defaults to 30."
+      },
+      "SkipQueryParam": {
+        "in": "query",
+        "name": "skip",
+        "required": false,
+        "schema": {
+          "type": "integer"
+        },
+        "description": "The number of records to skip (useful for pagination)."
+      },
+      "SortQueryParam": {
+        "in": "query",
+        "name": "sort",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The sort order. By default, returned records are sorted by primary key value in ascending order.\n\ne.g. `?sort=lastName%20ASC`"
+      }
+    }
+  },
+  "paths": {
+    "/room/send": {
+      "post": {
+        "summary": "/room/send",
+        "tags": [
+          "Message"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/join": {
+      "post": {
+        "summary": "/room/join",
+        "tags": [
+          "Room"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/leave": {
+      "post": {
+        "summary": "/room/leave",
+        "tags": [
+          "Room"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/{_id}/history": {
+      "get": {
+        "summary": "/room/{_id}/history",
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Route pattern variable `_id`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/{_id}/typing": {
+      "put": {
+        "summary": "/room/{_id}/typing",
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Route pattern variable `_id`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/{_id}/stoppedTyping": {
+      "put": {
+        "summary": "/room/{_id}/stoppedTyping",
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "_id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Route pattern variable `_id`"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested resource"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/message/find": {
+      "get": {
+        "summary": "List Message (find where) *",
+        "description": "Find a list of **Message** records that match the specified criteria.\n\n(\\*) Note that this is a [Sails blueprint shortcut route](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-blueprint-routes) (recommended for **development-mode only**)",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/find-where",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/find-where"
+        },
+        "tags": [
+          "Message"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AttributeFilterParam"
+          },
+          {
+            "$ref": "#/components/parameters/WhereQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/SkipQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortQueryParam"
+          },
+          {
+            "in": "query",
+            "name": "select",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,message,attachment,client,sender,room"
+            },
+            "description": "The attributes to include in the result, specified as a comma-delimited list. By default, all attributes are selected. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "omit",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,message,attachment,client,sender,room"
+            },
+            "description": "The attributes to exclude from the result, specified as a comma-delimited list. Cannot be used in conjuction with `select`. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "populate",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "false,room"
+            },
+            "description": "If specified, overide the default automatic population process. Accepts a comma-separated list of attribute names for which to populate record values, or specify `false` to have no attributes populated."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with a paged list of **Message** records that match the specified criteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/message"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/message/find/{_id}": {
+      "get": {
+        "summary": "Get Message (find one) *",
+        "description": "Look up the **Message** record with the specified ID.\n\n(\\*) Note that this is a [Sails blueprint shortcut route](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-blueprint-routes) (recommended for **development-mode only**)",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/find-one",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/find-one"
+        },
+        "tags": [
+          "Message"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-message"
+          },
+          {
+            "in": "query",
+            "name": "select",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,message,attachment,client,sender,room"
+            },
+            "description": "The attributes to include in the result, specified as a comma-delimited list. By default, all attributes are selected. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "omit",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,message,attachment,client,sender,room"
+            },
+            "description": "The attributes to exclude from the result, specified as a comma-delimited list. Cannot be used in conjuction with `select`. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "populate",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "false,room"
+            },
+            "description": "If specified, overide the default automatic population process. Accepts a comma-separated list of attribute names for which to populate record values, or specify `false` to have no attributes populated."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with a single **Message** record as a JSON dictionary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/message"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response denoting **Message** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/message/create": {
+      "get": {
+        "summary": "Create Message *",
+        "description": "Create a new **Message** record.\n\n(\\*) Note that this is a [Sails blueprint shortcut route](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-blueprint-routes) (recommended for **development-mode only**)",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/create",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/create"
+        },
+        "tags": [
+          "Message"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "createdAt",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "in": "query",
+            "name": "updatedAt",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "uniqueItems": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "message",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "attachment",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "client",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sender",
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "room",
+            "schema": {
+              "description": "JSON dictionary representing the **room** instance or FK when creating / updating / not populated",
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/room"
+                }
+              ]
+            },
+            "description": "JSON dictionary representing the **room** instance or FK when creating / updating / not populated"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with a JSON dictionary representing the newly created **Message** instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/message"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors; details in JSON response"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/message/update/{_id}": {
+      "get": {
+        "summary": "Update Message *",
+        "description": "Update an existing **Message** record.\n\n(\\*) Note that this is a [Sails blueprint shortcut route](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-blueprint-routes) (recommended for **development-mode only**)",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/update",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/update"
+        },
+        "tags": [
+          "Message"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-message"
+          },
+          {
+            "in": "query",
+            "name": "createdAt",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "in": "query",
+            "name": "updatedAt",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "uniqueItems": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "message",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "attachment",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "client",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sender",
+            "schema": {}
+          },
+          {
+            "in": "query",
+            "name": "room",
+            "schema": {
+              "description": "JSON dictionary representing the **room** instance or FK when creating / updating / not populated",
+              "oneOf": [
+                {
+                  "$ref": "#/components/schemas/room"
+                }
+              ]
+            },
+            "description": "JSON dictionary representing the **room** instance or FK when creating / updating / not populated"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with the newly updated **Message** record as a JSON dictionary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/message"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors; details in JSON response"
+          },
+          "404": {
+            "description": "Cannot update, **Message** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/message/destroy/{_id}": {
+      "get": {
+        "summary": "Delete Message (destroy) *",
+        "description": "Delete the **Message** record with the specified ID.\n\n(\\*) Note that this is a [Sails blueprint shortcut route](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-blueprint-routes) (recommended for **development-mode only**)",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/destroy",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/destroy"
+        },
+        "tags": [
+          "Message"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-message"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with a JSON dictionary representing the destroyed **Message** instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/message"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cannot destroy, **Message** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/find": {
+      "get": {
+        "summary": "List Room (find where) *",
+        "description": "Find a list of **Room** records that match the specified criteria.\n\n(\\*) Note that this is a [Sails blueprint shortcut route](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-blueprint-routes) (recommended for **development-mode only**)",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/find-where",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/find-where"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AttributeFilterParam"
+          },
+          {
+            "$ref": "#/components/parameters/WhereQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/SkipQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortQueryParam"
+          },
+          {
+            "in": "query",
+            "name": "select",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,name,description,refId,context,isPrivate,tags,members,messages"
+            },
+            "description": "The attributes to include in the result, specified as a comma-delimited list. By default, all attributes are selected. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "omit",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,name,description,refId,context,isPrivate,tags,members,messages"
+            },
+            "description": "The attributes to exclude from the result, specified as a comma-delimited list. Cannot be used in conjuction with `select`. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "populate",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "false,messages"
+            },
+            "description": "If specified, overide the default automatic population process. Accepts a comma-separated list of attribute names for which to populate record values, or specify `false` to have no attributes populated."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with a paged list of **Room** records that match the specified criteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/room"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/find/{_id}": {
+      "get": {
+        "summary": "Get Room (find one) *",
+        "description": "Look up the **Room** record with the specified ID.\n\n(\\*) Note that this is a [Sails blueprint shortcut route](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-blueprint-routes) (recommended for **development-mode only**)",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/find-one",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/find-one"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-room"
+          },
+          {
+            "in": "query",
+            "name": "select",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,name,description,refId,context,isPrivate,tags,members,messages"
+            },
+            "description": "The attributes to include in the result, specified as a comma-delimited list. By default, all attributes are selected. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "omit",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,name,description,refId,context,isPrivate,tags,members,messages"
+            },
+            "description": "The attributes to exclude from the result, specified as a comma-delimited list. Cannot be used in conjuction with `select`. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "populate",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "false,messages"
+            },
+            "description": "If specified, overide the default automatic population process. Accepts a comma-separated list of attribute names for which to populate record values, or specify `false` to have no attributes populated."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with a single **Room** record as a JSON dictionary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/room"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response denoting **Room** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/create": {
+      "get": {
+        "summary": "Create Room *",
+        "description": "Create a new **Room** record.\n\n(\\*) Note that this is a [Sails blueprint shortcut route](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-blueprint-routes) (recommended for **development-mode only**)",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/create",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/create"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "createdAt",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "in": "query",
+            "name": "updatedAt",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "uniqueItems": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
+            "in": "query",
+            "name": "description",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "refId",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "context",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "isPrivate",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "tags",
+            "schema": {
+              "type": "array",
+              "items": {},
+              "default": [],
+              "example": []
+            }
+          },
+          {
+            "in": "query",
+            "name": "members",
+            "schema": {
+              "type": "array",
+              "items": {},
+              "default": [],
+              "example": []
+            }
+          },
+          {
+            "in": "query",
+            "name": "messages",
+            "schema": {
+              "description": "Array of **message**'s or array of FK's when creating / updating / not populated",
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/message"
+              }
+            },
+            "description": "Array of **message**'s or array of FK's when creating / updating / not populated"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with a JSON dictionary representing the newly created **Room** instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/room"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors; details in JSON response"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/update/{_id}": {
+      "get": {
+        "summary": "Update Room *",
+        "description": "Update an existing **Room** record.\n\n(\\*) Note that this is a [Sails blueprint shortcut route](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-blueprint-routes) (recommended for **development-mode only**)",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/update",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/update"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-room"
+          },
+          {
+            "in": "query",
+            "name": "createdAt",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "in": "query",
+            "name": "updatedAt",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "string",
+              "uniqueItems": true
+            }
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "description",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "refId",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "context",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "isPrivate",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "in": "query",
+            "name": "tags",
+            "schema": {
+              "type": "array",
+              "items": {},
+              "default": [],
+              "example": []
+            }
+          },
+          {
+            "in": "query",
+            "name": "members",
+            "schema": {
+              "type": "array",
+              "items": {},
+              "default": [],
+              "example": []
+            }
+          },
+          {
+            "in": "query",
+            "name": "messages",
+            "schema": {
+              "description": "Array of **message**'s or array of FK's when creating / updating / not populated",
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/message"
+              }
+            },
+            "description": "Array of **message**'s or array of FK's when creating / updating / not populated"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with the newly updated **Room** record as a JSON dictionary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/room"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors; details in JSON response"
+          },
+          "404": {
+            "description": "Cannot update, **Room** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/destroy/{_id}": {
+      "get": {
+        "summary": "Delete Room (destroy) *",
+        "description": "Delete the **Room** record with the specified ID.\n\n(\\*) Note that this is a [Sails blueprint shortcut route](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-blueprint-routes) (recommended for **development-mode only**)",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/destroy",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/destroy"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-room"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with a JSON dictionary representing the destroyed **Room** instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/room"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cannot destroy, **Room** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/{_id}/{association}/add/{childid}": {
+      "get": {
+        "summary": "Add to for Room *",
+        "description": "Add a foreign record to one of this **Room** record's collections.\n\n(\\*) Note that this is a [Sails blueprint shortcut route](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-blueprint-routes) (recommended for **development-mode only**)",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/add-to",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/add-to"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-room"
+          },
+          {
+            "in": "path",
+            "name": "association",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "messages"
+              ]
+            },
+            "description": "The name of the association"
+          },
+          {
+            "in": "path",
+            "name": "childid",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "description": "**Room** record's foreign key values to use as the replacement for this collection (**messages** association)",
+                  "uniqueItems": true
+                }
+              ]
+            },
+            "description": "The desired target association record's foreign key value"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with the newly updated **Room** record as a JSON dictionary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/room"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cannot perform add to, **Room** record OR **FK record** with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/{_id}/{association}/replace": {
+      "get": {
+        "summary": "Replace for Room *",
+        "description": "Replace all of the child records in one of this **Room** record's associations.\n\nOnly one of the query parameters, that matches the **association** path parameter, should be specified.\n\n(\\*) Note that this is a [Sails blueprint shortcut route](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-blueprint-routes) (recommended for **development-mode only**)",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/replace",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/replace"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-room"
+          },
+          {
+            "in": "path",
+            "name": "association",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "messages"
+              ]
+            },
+            "description": "The name of the association"
+          },
+          {
+            "in": "query",
+            "name": "messages",
+            "description": "**Room** record's foreign key values to use as the replacement for this collection (**messages** association)",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "description": "**Room** record's foreign key values to use as the replacement for this collection (**messages** association)",
+                "uniqueItems": true
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with the newly updated **Room** record as a JSON dictionary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/room"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cannot replace, **Room** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/{_id}/{association}/remove/{childid}": {
+      "get": {
+        "summary": "Remove from for Room *",
+        "description": "Remove a foreign record from one of this **Room** record's collections.\n\n(\\*) Note that this is a [Sails blueprint shortcut route](https://sailsjs.com/documentation/concepts/blueprints/blueprint-routes#?shortcut-blueprint-routes) (recommended for **development-mode only**)",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/remove-from",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/remove-from"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-room"
+          },
+          {
+            "in": "path",
+            "name": "association",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "messages"
+              ]
+            },
+            "description": "The name of the association"
+          },
+          {
+            "in": "path",
+            "name": "childid",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "description": "**Room** record's foreign key values to use as the replacement for this collection (**messages** association)",
+                  "uniqueItems": true
+                }
+              ]
+            },
+            "description": "The desired target association record's foreign key value"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with the newly updated **Room** record as a JSON dictionary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/room"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cannot perform remove from, **Room** record OR **FK record** with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/message": {
+      "get": {
+        "summary": "List Message (find where)",
+        "description": "Find a list of **Message** records that match the specified criteria.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/find-where",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/find-where"
+        },
+        "tags": [
+          "Message"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AttributeFilterParam"
+          },
+          {
+            "$ref": "#/components/parameters/WhereQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/SkipQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortQueryParam"
+          },
+          {
+            "in": "query",
+            "name": "select",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,message,attachment,client,sender,room"
+            },
+            "description": "The attributes to include in the result, specified as a comma-delimited list. By default, all attributes are selected. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "omit",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,message,attachment,client,sender,room"
+            },
+            "description": "The attributes to exclude from the result, specified as a comma-delimited list. Cannot be used in conjuction with `select`. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "populate",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "false,room"
+            },
+            "description": "If specified, overide the default automatic population process. Accepts a comma-separated list of attribute names for which to populate record values, or specify `false` to have no attributes populated."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with a paged list of **Message** records that match the specified criteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/message"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Message",
+        "description": "Create a new **Message** record.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/create",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/create"
+        },
+        "tags": [
+          "Message"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Responds with a JSON dictionary representing the newly created **Message** instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/message"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors; details in JSON response"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "description": "JSON dictionary representing the Message instance to create.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/message"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/message/{_id}": {
+      "get": {
+        "summary": "Get Message (find one)",
+        "description": "Look up the **Message** record with the specified ID.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/find-one",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/find-one"
+        },
+        "tags": [
+          "Message"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-message"
+          },
+          {
+            "in": "query",
+            "name": "select",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,message,attachment,client,sender,room"
+            },
+            "description": "The attributes to include in the result, specified as a comma-delimited list. By default, all attributes are selected. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "omit",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,message,attachment,client,sender,room"
+            },
+            "description": "The attributes to exclude from the result, specified as a comma-delimited list. Cannot be used in conjuction with `select`. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "populate",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "false,room"
+            },
+            "description": "If specified, overide the default automatic population process. Accepts a comma-separated list of attribute names for which to populate record values, or specify `false` to have no attributes populated."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with a single **Message** record as a JSON dictionary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/message"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response denoting **Message** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update Message",
+        "description": "Update an existing **Message** record.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/update",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/update"
+        },
+        "tags": [
+          "Message"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-message"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with the newly updated **Message** record as a JSON dictionary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/message"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors; details in JSON response"
+          },
+          "404": {
+            "description": "Cannot update, **Message** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "description": "JSON dictionary representing the Message instance to update.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/message-without-required-constraint"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Message (destroy)",
+        "description": "Delete the **Message** record with the specified ID.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/destroy",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/destroy"
+        },
+        "tags": [
+          "Message"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-message"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with a JSON dictionary representing the destroyed **Message** instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/message"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cannot destroy, **Message** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/message/{_id}/{association}": {
+      "get": {
+        "summary": "Populate association for Message",
+        "description": "Populate and return foreign record(s) for the given association of this **Message** record.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/populate-where",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/populate-where"
+        },
+        "tags": [
+          "Message"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-message"
+          },
+          {
+            "in": "path",
+            "name": "association",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "room"
+              ]
+            },
+            "description": "The name of the association"
+          },
+          {
+            "$ref": "#/components/parameters/WhereQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/SkipQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortQueryParam"
+          },
+          {
+            "in": "query",
+            "name": "select",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,message,attachment,client,sender,room"
+            },
+            "description": "The attributes to include in the result, specified as a comma-delimited list. By default, all attributes are selected. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "omit",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,message,attachment,client,sender,room"
+            },
+            "description": "The attributes to exclude from the result, specified as a comma-delimited list. Cannot be used in conjuction with `select`. Not valid for plural (“collection”) association attributes."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with the list of associated records as JSON dictionaries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/room"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cannot populate, **Message** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room": {
+      "get": {
+        "summary": "List Room (find where)",
+        "description": "Find a list of **Room** records that match the specified criteria.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/find-where",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/find-where"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AttributeFilterParam"
+          },
+          {
+            "$ref": "#/components/parameters/WhereQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/SkipQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortQueryParam"
+          },
+          {
+            "in": "query",
+            "name": "select",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,name,description,refId,context,isPrivate,tags,members,messages"
+            },
+            "description": "The attributes to include in the result, specified as a comma-delimited list. By default, all attributes are selected. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "omit",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,name,description,refId,context,isPrivate,tags,members,messages"
+            },
+            "description": "The attributes to exclude from the result, specified as a comma-delimited list. Cannot be used in conjuction with `select`. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "populate",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "false,messages"
+            },
+            "description": "If specified, overide the default automatic population process. Accepts a comma-separated list of attribute names for which to populate record values, or specify `false` to have no attributes populated."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with a paged list of **Room** records that match the specified criteria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/room"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create Room",
+        "description": "Create a new **Room** record.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/create",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/create"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Responds with a JSON dictionary representing the newly created **Room** instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/room"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors; details in JSON response"
+          },
+          "404": {
+            "description": "Resource not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "description": "JSON dictionary representing the Room instance to create.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/room"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/room/{_id}": {
+      "get": {
+        "summary": "Get Room (find one)",
+        "description": "Look up the **Room** record with the specified ID.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/find-one",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/find-one"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-room"
+          },
+          {
+            "in": "query",
+            "name": "select",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,name,description,refId,context,isPrivate,tags,members,messages"
+            },
+            "description": "The attributes to include in the result, specified as a comma-delimited list. By default, all attributes are selected. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "omit",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,name,description,refId,context,isPrivate,tags,members,messages"
+            },
+            "description": "The attributes to exclude from the result, specified as a comma-delimited list. Cannot be used in conjuction with `select`. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "populate",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "false,messages"
+            },
+            "description": "If specified, overide the default automatic population process. Accepts a comma-separated list of attribute names for which to populate record values, or specify `false` to have no attributes populated."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with a single **Room** record as a JSON dictionary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/room"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Response denoting **Room** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update Room",
+        "description": "Update an existing **Room** record.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/update",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/update"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-room"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with the newly updated **Room** record as a JSON dictionary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/room"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation errors; details in JSON response"
+          },
+          "404": {
+            "description": "Cannot update, **Room** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "description": "JSON dictionary representing the Room instance to update.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/room-without-required-constraint"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete Room (destroy)",
+        "description": "Delete the **Room** record with the specified ID.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/destroy",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/destroy"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-room"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with a JSON dictionary representing the destroyed **Room** instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/room"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cannot destroy, **Room** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/{_id}/{association}/{childid}": {
+      "put": {
+        "summary": "Add to for Room",
+        "description": "Add a foreign record to one of this **Room** record's collections.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/add-to",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/add-to"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-room"
+          },
+          {
+            "in": "path",
+            "name": "association",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "messages"
+              ]
+            },
+            "description": "The name of the association"
+          },
+          {
+            "in": "path",
+            "name": "childid",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "description": "**Room** record's foreign key values to use as the replacement for this collection (**messages** association)",
+                  "uniqueItems": true
+                }
+              ]
+            },
+            "description": "The desired target association record's foreign key value"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with the newly updated **Room** record as a JSON dictionary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/room"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cannot perform add to, **Room** record OR **FK record** with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Remove from for Room",
+        "description": "Remove a foreign record from one of this **Room** record's collections.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/remove-from",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/remove-from"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-room"
+          },
+          {
+            "in": "path",
+            "name": "association",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "messages"
+              ]
+            },
+            "description": "The name of the association"
+          },
+          {
+            "in": "path",
+            "name": "childid",
+            "required": true,
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "description": "**Room** record's foreign key values to use as the replacement for this collection (**messages** association)",
+                  "uniqueItems": true
+                }
+              ]
+            },
+            "description": "The desired target association record's foreign key value"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with the newly updated **Room** record as a JSON dictionary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/room"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cannot perform remove from, **Room** record OR **FK record** with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/room/{_id}/{association}": {
+      "put": {
+        "summary": "Replace for Room",
+        "description": "Replace all of the child records in one of this **Room** record's associations.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/replace",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/replace"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-room"
+          },
+          {
+            "in": "path",
+            "name": "association",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "messages"
+              ]
+            },
+            "description": "The name of the association"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with the newly updated **Room** record as a JSON dictionary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/room"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cannot replace, **Room** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "requestBody": {
+          "description": "The primary key values (usually IDs) of the child records to use as the new members of this collection",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "description": "**Room** record's foreign key values to use as the replacement for this collection (**messages** association)",
+                      "uniqueItems": true
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Populate association for Room",
+        "description": "Populate and return foreign record(s) for the given association of this **Room** record.",
+        "externalDocs": {
+          "url": "https://sailsjs.com/documentation/reference/blueprint-api/populate-where",
+          "description": "See https://sailsjs.com/documentation/reference/blueprint-api/populate-where"
+        },
+        "tags": [
+          "Room"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ModelPKParam-room"
+          },
+          {
+            "in": "path",
+            "name": "association",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "messages"
+              ]
+            },
+            "description": "The name of the association"
+          },
+          {
+            "$ref": "#/components/parameters/WhereQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/SkipQueryParam"
+          },
+          {
+            "$ref": "#/components/parameters/SortQueryParam"
+          },
+          {
+            "in": "query",
+            "name": "select",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,name,description,refId,context,isPrivate,tags,members,messages"
+            },
+            "description": "The attributes to include in the result, specified as a comma-delimited list. By default, all attributes are selected. Not valid for plural (“collection”) association attributes."
+          },
+          {
+            "in": "query",
+            "name": "omit",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "createdAt,updatedAt,id,name,description,refId,context,isPrivate,tags,members,messages"
+            },
+            "description": "The attributes to exclude from the result, specified as a comma-delimited list. Cannot be used in conjuction with `select`. Not valid for plural (“collection”) association attributes."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Responds with the list of associated records as JSON dictionaries",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/message"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cannot populate, **Room** record with specified ID **NOT** found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  }
+}

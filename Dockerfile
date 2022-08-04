@@ -1,4 +1,8 @@
-FROM node:latest
+FROM node:18-alpine
+
+LABEL maintainer="Henri Aïdasso <ahenrij@gmail.com>"
+LABEL name="darkpearl/chat-service"
+LABEL version="0.0.1"
 
 EXPOSE 1337
 
@@ -9,11 +13,9 @@ COPY package*.json ./
 
 RUN npm install -g npm@latest
 
-RUN npm install && npm cache clean --force && npm install sails -g
-# If you are building your code for production
-# RUN npm ci --only=production
+RUN npm ci --only=production
 
 # Bundle app source
 COPY . .
 
-CMD [ "sails", "lift", "--prod"]
+CMD ["node", "app.js", "--prod"]

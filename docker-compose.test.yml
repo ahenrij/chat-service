@@ -1,28 +1,30 @@
 version: '3'
 
 services:
+
   chat_service:
-    build: .
+    image: darkpearl/chat-service
     container_name: chat_service
     environment:
       - DATABASE_TYPE=mongo
-      - DATABASE_URL=mongodb://root:AbBE2smYVcsxGFUMUzOeQA@localhost:27017/chat_service_db
+      - DATABASE_URL=mongodb://root:AbBE2smYVcsxGFUMUzOeQA@mongodb:27017/chat_service_db
     ports:
       - 1337:1337
     links:
       - mongodb
-
+    depends_on:
+      - mongodb
 
   mongodb:
     image: mongo:latest
-    container_name: chat_service_db
+    container_name: chat_service_mongo
     ports:
       - 27017:27017
-    environment: 
+    env_file: 
       - .env
     volumes:
-      - chat-service-data:/data/db
+      - chat-service-db:/data/db
       - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
 
 volumes:
-  chat-service-data:
+  chat-service-db:

@@ -5,3 +5,4 @@ Dockerfile
 .dockerignore
 .editorconfig
 node_modules
+.tmp

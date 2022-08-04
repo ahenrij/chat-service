@@ -1,18 +1,16 @@
 {
-  "name": "sails-mongo-docker",
+  "name": "chat-service",
   "private": true,
   "version": "0.0.0",
-  "description": "a Sails application",
+  "description": "Chat messaging microservice.",
   "keywords": [],
   "dependencies": {
     "@sailshq/connect-redis": "^3.2.1",
     "@sailshq/lodash": "^3.10.3",
     "@sailshq/socket.io-redis": "^5.2.0",
     "dotenv": "^16.0.0",
-    "grunt": "1.5.2",
     "sails": "^1.4.0",
     "sails-hook-autoreload": "^1.1.0",
-    "sails-hook-grunt": "^4.0.0",
     "sails-hook-orm": "^3.0.1",
     "sails-hook-sockets": "^2.0.0",
     "sails-mongo": "^2.0.0"
@@ -29,9 +27,9 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/henri/sails-mongo-docker.git"
+    "url": "git://github.com/henri/chat-service.git"
   },
-  "author": "henri",
+  "author": "ahenrij",
   "license": "",
   "engines": {
     "node": "^17.4"

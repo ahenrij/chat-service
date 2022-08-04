@@ -1,0 +1,7 @@
+scripts/
+.env*
+docker-compose*
+Dockerfile
+.dockerignore
+.editorconfig
+node_modules

@@ -7,14 +7,10 @@ A microservice for chat messaging.
 
 * Inspired by [m3o chat api](https://m3o.com/chat/api)
 
-<br>
-
 ## Env. variables
 
 - *DATABASE_URL* : Database connection string. More information [here](https://sailsjs.com/documentation/reference/configuration/sails-config-datastores#the-connection-url)
 - *DATABASE_TYPE* : disk, mysql, postgres, mongo (default to disk)
-
-<br>
 
 ## Usage
 
@@ -27,7 +23,6 @@ docker run -it -p 80:1337 -e "DATABASE_TYPE=mongo" -e "DATABASE_URL=mongodb://lo
 ### Run using docker compose
 See backend usage example in [docker-compose.test.yml](./docker-compose.test.yml) file.
 
-<br>
 
 ## Get started for development
 

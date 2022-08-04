@@ -134,3 +134,4 @@ lib-cov
 
 .data
 .env
+docker-compose.yml

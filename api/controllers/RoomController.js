@@ -61,17 +61,20 @@ module.exports = {
             return res.badRequest({ message: 'This must be a socket request.' })
         }
         let roomId = req.body.roomId
-        let user = req.body.user // user's json representation with mandatory id field
+        let user = req.body.user // User's json representation with mandatory id field
         if (!roomId || !user || !user.id) {
             return res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
         Room.findOne({ or: [{id: roomId}, {refId: roomId}] }).exec(async (error, foundRoom) => {
             if (error) { return res.serverError(error) }
             if (!foundRoom) { return res.notFound() }
-            // Add user to members
+
+            // Add user to members and ensure it is unique
+            _.remove(foundRoom.members, m => m.id == user.id)
             foundRoom.members.push(user)
-            let members = _.uniq(foundRoom.members)
-            // save update
+            const members = foundRoom.members
+
+            // Save update and notify
             let updatedRoom = await Room.update({ id: foundRoom.id }).set( { members } ).fetch()
             sails.sockets.join(req, 'room_' + roomId)
             return res.ok({ data: updatedRoom })
@@ -90,9 +93,12 @@ module.exports = {
         Room.findOne({ or: [{id: roomId}, {refId: roomId}] }).exec(async (error, foundRoom) => {
             if (error) { return res.negotiate(error) }
             if (!foundRoom) { return res.notFound() }
+
+            // Remove the user
             _.remove(foundRoom.members, m => m.id == user.id)
-            let members = foundRoom.members
-            // save update
+            const members = foundRoom.members
+
+            // Save update and notify
             let updatedRoom = await Room.update({ id: foundRoom.id }).set({ members }).fetch()
             sails.sockets.leave(req, 'room_' + roomId)
             return res.ok({ data: updatedRoom })
@@ -109,7 +115,7 @@ module.exports = {
             return res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
         // TODO: Check if room exists
-        // send typing event except user itself.
+        // Send typing event except user itself.
         sails.broadcast('room_' + roomId, TYPING_EVENT, user, (req.isSocket ? req : undefined))
         return res.ok()
     },

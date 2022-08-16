@@ -75,7 +75,7 @@ module.exports = {
             const members = foundRoom.members
 
             // Save update and notify
-            let updatedRoom = await Room.update({ id: foundRoom.id }).set( { members } ).fetch()
+            let updatedRoom = await Room.updateOne({ id: foundRoom.id }).set( { members } ).fetch()
             sails.sockets.join(req, 'room_' + roomId)
             return res.ok({ data: updatedRoom })
         })
@@ -99,7 +99,7 @@ module.exports = {
             const members = foundRoom.members
 
             // Save update and notify
-            let updatedRoom = await Room.update({ id: foundRoom.id }).set({ members }).fetch()
+            let updatedRoom = await Room.updateOne({ id: foundRoom.id }).set({ members }).fetch()
             sails.sockets.leave(req, 'room_' + roomId)
             return res.ok({ data: updatedRoom })
         })

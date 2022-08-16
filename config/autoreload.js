@@ -1,17 +1,17 @@
 /**
  * Autoreload configurations.
- * 
+ *
  * https://github.com/sgress454/sails-hook-autoreload
  */
 
 module.exports.autoreload = {
-    active: true,
+  active: true,
 
-    overrideMigrateSetting: false,
+  overrideMigrateSetting: false,
 
-    ignored: [
-        '**/.tmp/**',
-        '**/views/**',
-        '**/assets/**'
-    ]
-}
+  ignored: [
+    '**/.tmp/**',
+    '**/views/**',
+    '**/assets/**'
+  ]
+};

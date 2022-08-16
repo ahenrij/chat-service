@@ -20,7 +20,7 @@ module.exports = {
     find: function (_req, res) {
         Room.find().exec((error, data) => {
             if (error) { return res.serverError(error) }
-            if (!data) { return res.notFound({ message: 'Aucune donnée correspondante.' }) }
+            if (!data) { return res.notFound({ message: 'No matching data.' }) }
             res.ok({ data })
         })
     },
@@ -29,7 +29,7 @@ module.exports = {
         let id = req.param('id')
         Room.findOne({ or: [{ id }, { refId: id }] }).exec((error, data) => {
             if (error) { return res.serverError(error) }
-            if (!data) { return res.notFound({ message: 'Aucune donnée correspondante.' }) }
+            if (!data) { return res.notFound({ message: 'No matching data.' }) }
             res.ok({ data })
         })
     },
@@ -47,7 +47,7 @@ module.exports = {
         }
         Room.findOne({ or: [{ id: id }, {refId: id}] }).populate('messages').exec((error, data) => {
             if (error) { return res.negotiate(error) }
-            if (!data) { return res.notFound({ message: 'Aucune donnée correspondante.' }) }
+            if (!data) { return res.notFound({ message: 'No matching data.' }) }
             res.ok({ data: data.messages })
         })
     },
@@ -68,7 +68,7 @@ module.exports = {
         }
         Room.findOne({ or: [{id: roomId}, {refId: roomId}] }).exec(async (error, foundRoom) => {
             if (error) { return res.serverError(error) }
-            if (!foundRoom) { return res.notFound({ message: 'Aucune donnée correspondante.' }) }
+            if (!foundRoom) { return res.notFound({ message: 'No matching data.' }) }
             // Add user to members
             foundRoom.members.push(user)
             let members = _.uniq(foundRoom.members)
@@ -90,7 +90,7 @@ module.exports = {
         }
         Room.findOne({ or: [{id: roomId}, {refId: roomId}] }).exec(async (error, foundRoom) => {
             if (error) { return res.negotiate(error) }
-            if (!foundRoom) { return res.notFound({ message: 'Aucune donnée correspondante.' }) }
+            if (!foundRoom) { return res.notFound({ message: 'No matching data.' }) }
             _.remove(foundRoom.members, m => m.id == user.id)
             let members = foundRoom.members
             // save update

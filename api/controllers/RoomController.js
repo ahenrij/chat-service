@@ -20,8 +20,8 @@ module.exports = {
     find: function (_req, res) {
         Room.find().exec((error, data) => {
             if (error) { return res.serverError(error) }
-            if (!data) { return res.notFound({ message: 'No matching data.' }) }
-            res.ok({ data })
+            if (!data) { return res.notFound() }
+            return res.ok({ data })
         })
     },
 
@@ -29,8 +29,8 @@ module.exports = {
         let id = req.param('id')
         Room.findOne({ or: [{ id }, { refId: id }] }).exec((error, data) => {
             if (error) { return res.serverError(error) }
-            if (!data) { return res.notFound({ message: 'No matching data.' }) }
-            res.ok({ data })
+            if (!data) { return res.notFound() }
+            return res.ok({ data })
         })
     },
 
@@ -42,13 +42,12 @@ module.exports = {
     history: function (req, res) {
         let id = req.param('id')
         if (id.trim() == '') {
-            res.badRequest({ message: 'Please make sure request parameters are correct.' })
-            return
+            return res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
         Room.findOne({ or: [{ id: id }, {refId: id}] }).populate('messages').exec((error, data) => {
             if (error) { return res.negotiate(error) }
-            if (!data) { return res.notFound({ message: 'No matching data.' }) }
-            res.ok({ data: data.messages })
+            if (!data) { return res.notFound() }
+            return res.ok({ data: data.messages })
         })
     },
 
@@ -64,18 +63,18 @@ module.exports = {
         let roomId = req.body.roomId
         let user = req.body.user // user's json representation with mandatory id field
         if (!roomId || !user || !user.id) {
-            res.badRequest({ message: 'Please make sure request parameters are correct.' })
+            return res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
         Room.findOne({ or: [{id: roomId}, {refId: roomId}] }).exec(async (error, foundRoom) => {
             if (error) { return res.serverError(error) }
-            if (!foundRoom) { return res.notFound({ message: 'No matching data.' }) }
+            if (!foundRoom) { return res.notFound() }
             // Add user to members
             foundRoom.members.push(user)
             let members = _.uniq(foundRoom.members)
             // save update
             let updatedRoom = await Room.update({ id: foundRoom.id }).set( { members } ).fetch()
             sails.sockets.join(req, 'room_' + roomId)
-            res.ok({ data: updatedRoom })
+            return res.ok({ data: updatedRoom })
         })
     },
 
@@ -86,17 +85,17 @@ module.exports = {
         let roomId = req.body.roomId
         let user = req.body.user // user's json representation with mandatory id field
         if (!roomId || !user || !user.id) {
-            res.badRequest({ message: 'Please make sure request parameters are correct.' })
+            return res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
         Room.findOne({ or: [{id: roomId}, {refId: roomId}] }).exec(async (error, foundRoom) => {
             if (error) { return res.negotiate(error) }
-            if (!foundRoom) { return res.notFound({ message: 'No matching data.' }) }
+            if (!foundRoom) { return res.notFound() }
             _.remove(foundRoom.members, m => m.id == user.id)
             let members = foundRoom.members
             // save update
             let updatedRoom = await Room.update({ id: foundRoom.id }).set({ members }).fetch()
             sails.sockets.leave(req, 'room_' + roomId)
-            res.ok({ data: updatedRoom })
+            return res.ok({ data: updatedRoom })
         })
     },
 
@@ -107,7 +106,7 @@ module.exports = {
         let user = req.body.user // user that is typing's id and name
         let roomId = req.body.roomId
         if (!roomId || !user || !user.id || !user.name) {
-            res.badRequest({ message: 'Please make sure request parameters are correct.' })
+            return res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
         // TODO: Check if room exists
         // send typing event except user itself.
@@ -121,7 +120,7 @@ module.exports = {
         }
         let roomId = req.body.roomId
         if (!roomId) {
-            res.badRequest({ message: 'Please make sure request parameters are correct.' })
+            return res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }
         // TODO: Check if room exists
         sails.broadcast('room_' + roomId, STOPPED_TYPING_EVENT, (req.isSocket ? req : undefined))

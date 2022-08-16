@@ -86,7 +86,7 @@ module.exports = {
             return res.badRequest({ message: 'This must be a socket request.' })
         }
         let roomId = req.body.roomId
-        let user = req.body.user // user's json representation with mandatory id field
+        let user = req.body.user // User's json representation with mandatory id field
         if (!roomId || !user || !user.id) {
             return res.badRequest({ message: 'Please make sure request parameters are correct.' })
         }

@@ -116,7 +116,7 @@ module.exports = {
     }
     // TODO: Check if room exists
     // Send typing event except user itself.
-    sails.broadcast('room_' + roomId, TYPING_EVENT, user, (req.isSocket ? req : undefined));
+    sails.broadcast('room_' + roomId, TYPING_EVENT, req.body, (req.isSocket ? req : undefined));
     return res.ok();
   },
 
@@ -129,7 +129,7 @@ module.exports = {
       return res.badRequest({ message: 'Please make sure request parameters are correct.' });
     }
     // TODO: Check if room exists
-    sails.broadcast('room_' + roomId, STOPPED_TYPING_EVENT, (req.isSocket ? req : undefined));
+    sails.broadcast('room_' + roomId, STOPPED_TYPING_EVENT, roomId, (req.isSocket ? req : undefined));
     return res.ok();
   }
 };

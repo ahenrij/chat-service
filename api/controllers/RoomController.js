@@ -124,7 +124,7 @@ module.exports = {
     if (!req.isSocket) {
       return res.badRequest({ message: 'This must be a socket request.' });
     }
-    let roomId = req.body.roomId;
+    let roomId = req.param('id');
     if (!roomId) {
       return res.badRequest({ message: 'Please make sure request parameters are correct.' });
     }

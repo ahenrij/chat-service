@@ -24,6 +24,6 @@ module.exports.routes = {
   'POST /room/send': { controller: 'MessageController', action: 'send' },
   'POST /room/join': { controller: 'RoomController', action: 'join' },
   'POST /room/leave': { controller: 'RoomController', action: 'leave' },
-  'PUT /room/:id/typing': { controller: 'RoomController', action: 'typing' },
+  'PUT /room/typing': { controller: 'RoomController', action: 'typing' },
   'PUT /room/:id/stoppedTyping': { controller: 'RoomController', action: 'stoppedTyping' },
 };

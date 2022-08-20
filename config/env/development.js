@@ -14,5 +14,9 @@ module.exports = {
       allowCredentials: true,
       allowRequestHeaders: 'content-type, authorization'
     }
-  }
+  },
+  blueprints: {
+    rest: true,
+    shortcuts: false,
+  },
 };

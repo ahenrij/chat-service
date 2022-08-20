@@ -21,9 +21,9 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
   'GET /room/:id/history': { controller: 'RoomController', action: 'history' },
-  'POST /room/send': { controller: 'MessageController', action: 'send' },
   'POST /room/join': { controller: 'RoomController', action: 'join' },
   'POST /room/leave': { controller: 'RoomController', action: 'leave' },
   'PUT /room/typing': { controller: 'RoomController', action: 'typing' },
   'PUT /room/:id/stoppedTyping': { controller: 'RoomController', action: 'stoppedTyping' },
+  'POST /message/send': { controller: 'MessageController', action: 'send' },
 };

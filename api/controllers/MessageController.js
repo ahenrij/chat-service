@@ -15,10 +15,13 @@ module.exports = {
       return res.badRequest({ message: 'This must be a socket request.' });
     }
     let roomId = req.body.room;
-    Message.create(req.body).exec((error, data) => { // data is createdMessage
+    Message.create(req.body).fetch().exec(async (error, data) => { // data is createdMessage
       if (error) { return res.serverError(error); }
-      sails.sockets.broadcast('room_' + roomId, NEW_MESSAGE_EVENT, data);
-      res.ok({ data });
+      // get chat history
+      const history = await Message.find({ room: roomId });
+      // send message event with new message and history
+      sails.sockets.broadcast('room_' + roomId, NEW_MESSAGE_EVENT, { data, history });
+      res.ok({ data, history });
     });
   }
 };

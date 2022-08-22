@@ -20,7 +20,7 @@ module.exports = {
   find: function (_req, res) {
     Room.find().exec((error, data) => {
       if (error) { return res.serverError(error); }
-      if (!data) { return res.notFound(); }
+      if (!data) { return res.badRequest({ message: 'Room not found.' }); }
       return res.ok({ data });
     });
   },
@@ -29,7 +29,7 @@ module.exports = {
     let id = req.param('id');
     Room.findOne({ or: [{ id }, { refId: id }] }).exec((error, data) => {
       if (error) { return res.serverError(error); }
-      if (!data) { return res.notFound(); }
+      if (!data) { return res.badRequest({ message: 'Room not found.' }); }
       return res.ok({ data });
     });
   },
@@ -46,7 +46,7 @@ module.exports = {
     }
     Room.findOne({ or: [{ id: id }, {refId: id}] }).populate('messages').exec((error, data) => {
       if (error) { return res.negotiate(error); }
-      if (!data) { return res.notFound(); }
+      if (!data) { return res.badRequest({ message: 'Room not found.' }); }
       return res.ok({ data: data.messages });
     });
   },
@@ -67,7 +67,7 @@ module.exports = {
     }
     Room.findOne({ or: [{id: roomId}, {refId: roomId}] }).exec(async (error, foundRoom) => {
       if (error) { return res.serverError(error); }
-      if (!foundRoom) { return res.notFound(); }
+      if (!foundRoom) { return res.badRequest({ message: 'Room not found.' }); }
 
       // Add user to members and ensure it is unique
       _.remove(foundRoom.members, m => m.id === user.id);
@@ -92,7 +92,7 @@ module.exports = {
     }
     Room.findOne({ or: [{id: roomId}, {refId: roomId}] }).exec(async (error, foundRoom) => {
       if (error) { return res.negotiate(error); }
-      if (!foundRoom) { return res.notFound(); }
+      if (!foundRoom) { return res.badRequest({ message: 'Room not found.' }); }
 
       // Remove the user
       _.remove(foundRoom.members, m => m.id === user.id);

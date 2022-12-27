@@ -23,8 +23,8 @@ services:
     env_file: 
       - .env
     volumes:
-      - chat-service-db:/data/db
+      - chat-service-data:/data/db
       - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
 
 volumes:
-  chat-service-db:
+  chat-service-data:
